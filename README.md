@@ -20,7 +20,8 @@ assignments are in the right language. These scripts need to be copied
 into the appropriate homework folder and renamed to `checker.rkt`.
 
 The `init` folder contains various scripts to automatically
-start/restart the server
+start/restart the server. These scripts may need to be modified to point
+to the right server configuration directories and to run as a valid user.
 
 ##Grades server
 The grades server includes checker scripts for checking that grades are
@@ -33,7 +34,8 @@ The grades server does not allow users to sign up for obvious reasons.
 Use the `gen-graders.rkt` script in `bin` to 
 
 The `init` folder contains various scripts to automatically
-start/restart the server
+start/restart the server. These scripts may need to be modified to point
+to the right server configuration directories and to run as a valid user.
 
 ##Automation
 ###Gradebook
