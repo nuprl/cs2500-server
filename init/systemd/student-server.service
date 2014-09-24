@@ -1,0 +1,15 @@
+[Unit]
+Description=Fall 2013 CS2500 Handin server
+Requires=network.target xvfb.service
+After=network.target
+
+[Service]
+Type=simple
+Environment="DISPLAY=:99"
+WorkingDirectory=/home/bluephoenix47/cs2500-server/cs2500-server
+User=bluephoenix47
+ExecStart=/usr/bin/racket -l handin-server 
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

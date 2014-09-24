@@ -1,0 +1,10 @@
+[Unit]
+Description=Xvfb service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/Xvfb :99
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

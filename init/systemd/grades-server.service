@@ -1,0 +1,15 @@
+[Unit]
+Description=Fall 2013 Grade Handin server
+Requires=network.target xvfb.service
+After=network.target
+
+[Service]
+Type=simple
+Environment="DISPLAY=:99"
+WorkingDirectory=/home/bluephoenix47/cs2500-grades/cs2500-grades
+User=bluephoenix47
+ExecStart=/usr/bin/racket -l handin-server 
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
