@@ -1,6 +1,9 @@
 cs2500-server
 =============
 
+This package is currently unstable, and mostly unusable. It require the
+cs2500-scripts package to be reorganized and renamed cs2500-lib.
+
 This package contains the cs2500 assignment and grades server
 startup scripts, configurations files, checker scripts, assignment and
 grade automation scripts.
