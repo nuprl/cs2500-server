@@ -16,6 +16,11 @@ The student server is used by students to turn in assignments and check
 grades. The grading server is used by staff to return graded
 assignments, exams, etc.
 
+##Updating
+Each semester, you should update the server certificate. The script
+`bin/gen-key` will generate and install the certificates, but you need
+to update the handin clients manually.
+
 
 ##Student server
 The student server includes checker scripts for checking that
