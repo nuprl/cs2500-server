@@ -8,7 +8,10 @@ This package contains the cs2500 assignment and grades server
 startup scripts, configurations files, checker scripts, assignment and
 grade automation scripts.
 
-Requires cs2500-lib
+Requires cs2500-lib, which requires `CS2500_GRADESERVER_DIR` and
+`CS2500-STUDENTSERVER_DIR` be defined in the environment in order to
+correctly access configuration options. A .bashrc file is included which
+files them.
 
 ##Intro.
 The cs2500 servers consist of a student server and a grading server.
