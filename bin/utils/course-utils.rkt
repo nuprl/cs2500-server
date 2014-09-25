@@ -31,8 +31,33 @@
 (define course-dir  (course-path 'directory))
 (define course-file (course-path 'file))
 
+(provide grades-dir grades-file)
+(define grades-basedir
+  (or (getenv "GRADES_SERVER")
+      ;; (regexp-replace
+      ;;  #rx"/$"
+      ;;  (path->string (simplify-path (build-path heredir 'up)))
+      ;;  "")
+      (error 'course-path "expecting a GRADES_SERVER environment variable")
+      ))
+(define ((grades-path mode) . subpaths)
+  (let* ([path (apply string-append basedir
+                      (map (λ (sub) (string-append "/" sub)) subpaths))]
+         [path (regexp-replace* #rx"//+" path "/")]
+         [path (regexp-replace #rx"/+$" path "")])
+    (unless ((case mode
+               [(directory) directory-exists?]
+               [(file)      file-exists?]
+               [else (error 'course-path "bad mode: ~s" mode)])
+             path)
+      (error 'grades-path "~a not found: ~a" mode path))
+    path))
+(define grades-dir  (grades-path 'directory))
+(define grades-file (grades-path 'file))
+
+
 (unless (getenv "PLT_HANDINSERVER_DIR")
-  (void (putenv "PLT_HANDINSERVER_DIR" (course-dir "cs2500-server"))))
+  (void (putenv "PLT_HANDINSERVER_DIR" (course-dir ""))))
 
 ;; expecting an optional predicate (for filtering) and a directory in any order
 (provide ls)
@@ -43,7 +68,7 @@
       (if pred? (filter pred? l) l))))
 
 (define (read-data-file f)
-  (with-input-from-file (course-file "cs2500-server" f) read))
+  (with-input-from-file (course-file "" f) read))
 
 ;; ----------------------------------------------------------------------------
 

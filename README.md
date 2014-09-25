@@ -23,6 +23,7 @@ The `init` folder contains various scripts to automatically
 start/restart the server. These scripts may need to be modified to point
 to the right server configuration directories and to run as a valid user.
 
+
 ##Grades server
 The grades server includes checker scripts for checking that grades are
 returns in the right format. These formats are crucial to automatically
@@ -43,6 +44,9 @@ The server uses Eli's grading scripts to parse annotations and manage
 the gradebook automatically. They are copied and distributed with
 permission. These scripts require server users have certain fields,
 which are included in `config.rktd.default`.
+
+The location of the student server needs to be configured in
+`bin/utils/sh-init` to use Eli's scripts.
 
 ###Due dates
 The server can automatically manage due dates and send assignments to

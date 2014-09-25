@@ -1,14 +1,19 @@
-#lang racket
-(provide gen-users)
+#!/bin/bash
+#| -*- scheme -*-
+exec "racket" "$0" "$@"
+|#
+(require
+  (only-in cs2500-lib/config grade-server-dir))
+
 
 ;; gen-users
 ;; (listof (fullname email)) -> void
 ;; given a list of grader names and email addresses, generate an initial
 ;; users.rtkd. Every user has a default password of "password"
 (define (gen-users ls)
- (let ([users (with-input-from-file "grades-server/users.rktd" read)])
+ (let ([users (with-input-from-file (build-path (grade-server-dir) "users.rktd") read)])
    (with-output-to-file
-     "grades-server/users.rktd"
+     (build-path (grade-server-dir) "users.rktd")
      (thunk
        (pretty-write (append (map (lambda (p)
                         ;; "password"
@@ -20,4 +25,5 @@
                              users)))
      #:exists 'replace)))
 
-(gen-users (with-input-from-file "graders.rkt" read))
+(gen-users (with-input-from-file (vector-ref
+                                   (current-command-line-arguments) 1) read))

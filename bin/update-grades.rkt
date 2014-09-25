@@ -1,9 +1,9 @@
 #lang racket
 (require
   racket/cmdline
-  "cs2500-scripts/problem-set.rkt"
-  "cs2500-scripts/grading.rkt"
-  (only-in "cs2500-scripts/config.rkt" grade-server-dir))
+  cs2500-lib/problem-set
+  cs2500-lib/grading
+  (only-in cs2500-lib/config grade-server-dir))
 
 (define-values (psn points) (command-line
   #:program "update-grades"
