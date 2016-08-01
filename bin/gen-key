@@ -1,0 +1,5 @@
+#!/bin/bash
+openssl req -new -nodes -x509 -days 365 -out server-cert.pem -keyout private-key.pem
+cp server-cert.pem private-key.pem student-server
+mv server-cert.pem private-key.pem grades-server
+echo "Remember to copy *only* server-cert.pem to the clients and update them"
