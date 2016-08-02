@@ -11,8 +11,8 @@
          "req" "-x509" "-newkey" "rsa:2048"
          "-keyout" "private-key.pem" "-out" "server-cert.pem" "-days" "365")
 
-(copy-file (build-path this-dir "private-key.pem") student-server)
-(copy-file (build-path this-dir "private-key.pem") grades-server)
-(copy-file (build-path this-dir "server-cert.pem") student-server)
-(copy-file (build-path this-dir "server-cert.pem") grades-server)
+(copy-file (build-path this-dir "private-key.pem") student-server #t)
+(copy-file (build-path this-dir "private-key.pem") grades-server #t)
+(copy-file (build-path this-dir "server-cert.pem") student-server #t)
+(copy-file (build-path this-dir "server-cert.pem") grades-server #t)
 (displayln "Remember to copy *only* server-cert.pem to the clients and update them")
