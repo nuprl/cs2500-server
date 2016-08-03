@@ -12,4 +12,5 @@
   (("Full Name" #f #f)
    ("Lab" - #f)
    ("Grader" - #f)))
- (master-password #f))
+ (master-password #f)
+ (hook-file "hook.rkt"))
