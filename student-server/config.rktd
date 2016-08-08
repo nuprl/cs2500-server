@@ -13,4 +13,4 @@
    ("Lab" - #f)
    ("Grader" - #f)))
  (master-password #f)
- (hook-file "hook.rkt"))
+ (group-authentication multi))
