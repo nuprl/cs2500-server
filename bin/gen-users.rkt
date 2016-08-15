@@ -1,9 +1,7 @@
-#!/bin/bash
-#| -*- scheme -*-
-exec "racket" "$0" "$@"
-|#
+#!/usr/bin/env racket
+#lang racket
 (require
-  (only-in cs2500-lib/config grade-server-dir))
+  (only-in "utils/config.rkt" grade-server-dir))
 
 
 ;; gen-users

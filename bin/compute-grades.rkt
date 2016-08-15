@@ -1,9 +1,4 @@
-#!/bin/bash
-#| -*- scheme -*-
-eval "`$(dirname "$0")/utils/sh-init`"
-exec "racket" "$0" "$@"
-|#
-
+#!/usr/bin/env racket
 #lang racket/base
 ;; Warning: chunks of this file have been modified by William J. Bowman
 ;; for cs2500. These chunks may contradict the README without
