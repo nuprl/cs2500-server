@@ -10,6 +10,9 @@
    #:args (assignment parts)
    (values assignment (string->number parts))))
 
+(unless (and (integer? part-count) (> part-count 0))
+  (error 'part-count "Part count not positive integer: ~a" part-count))
+
 (define grader-assignment-dir (build-path grader-server-dir assignment))
 (define student-return-dir
   (build-path student-server-dir (format "~a-grades" assignment)))

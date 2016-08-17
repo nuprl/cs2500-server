@@ -10,6 +10,9 @@
    #:args (assignment parts)
    (values assignment (string->number parts))))
 
+(unless (and (integer? part-count) (> part-count 0))
+  (error 'part-count "Part count not positive integer: ~a" part-count))
+
 (define student-assignment-dirs
   (for/list ([i (in-range 1 (add1 part-count))])
     (build-path student-server-dir (format "~a-part~a" assignment i))))

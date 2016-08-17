@@ -10,9 +10,10 @@
 (define base-dir (build-path utils-dir ".." ".."))
 (define student-server-dir (build-path base-dir "student-server"))
 (define grader-server-dir (build-path base-dir "grades-server"))
+(define data-dir (build-path base-dir "data"))
 (define pairing-file "pairings.rktd")
 (define checker-file "checker.rkt")
-(define graders-mapping-file "graders.rktd")
+(define graders-mapping-file "grader-mapping.rktd")
 (define server-ignore-file-list/strings
   (list checker-file
         pairing-file
