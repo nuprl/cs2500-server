@@ -3,6 +3,7 @@
  (port-number 7978)
  (allow-new-users #f)
  (allow-change-info #t)
+ (allow-web-upload (".rkt" ".tar.gz" "tar" ".tar.bz2" ".zip"))
  (default-file-name "grades.rkt")
  (username-case-sensitive #t)
  (web-log-file "web.log")
