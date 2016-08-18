@@ -1,6 +1,6 @@
-((active-dirs ("test"))
+((active-dirs ("hw3"))
  (inactive-dirs ())
- (port-number 9001)
+ (port-number 7978)
  (allow-new-users #f)
  (allow-change-info #t)
  (default-file-name "grades.rkt")
