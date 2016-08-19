@@ -1,6 +1,6 @@
 ((active-dirs ("hw3-part1" "hw3-part2"))
  (inactive-dirs ("hw3" "hw3-part1"))
- (allow-new-users #t)
+ (allow-new-users #f)
  (allow-change-info #t)
  (max-upload 1024000)
  (username-case-sensitive #t)
