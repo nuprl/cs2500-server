@@ -1,5 +1,5 @@
-((active-dirs ("hw3" "honors-hw3"))
- (inactive-dirs ("hw1" "hw2" "test"))
+((active-dirs ("hw3-part1" "hw3-part2"))
+ (inactive-dirs ("hw3" "hw3-part1"))
  (allow-new-users #t)
  (allow-change-info #t)
  (max-upload 1024000)
