@@ -2,6 +2,7 @@
 #lang racket
 
 (require racket/cmdline
+         file/zip
          "utils/constants.rkt"
          "utils/data-parse.rkt")
 
@@ -32,6 +33,8 @@
   (read-grader-mapping-file (build-path (first student-assignment-dirs)
                                         graders-mapping-file)))
 
+
+; Copy existing assignments to grader folder
 (for ([assignment-dir (in-list student-assignment-dirs)]
       [i (in-naturals 1)])
   (for ([student-path (directory-list assignment-dir
@@ -42,4 +45,14 @@
       (define handin-path (build-path student-path handin-file))
       (define grade-dest (build-path grader-assignment-dir grader student)) 
       (make-directory* grade-dest)
-      (copy-file handin-path (build-path grade-dest (format "part~a.rkt" i))))))
+      (define dest (build-path grade-dest (format "part~a.rkt" i)))
+      (when dest
+        (copy-file handin-path dest)))))
+
+; zip up these new assignments for graders
+(for ([grader (directory-list grader-assignment-dir
+                              #:build? #t)])
+  (parameterize ([current-directory grader])
+    (for ([student (directory-list grader)]
+          #:when (directory-exists? student))
+      (zip (path-replace-extension student ".zip") student))))
