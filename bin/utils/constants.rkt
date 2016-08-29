@@ -22,3 +22,6 @@
   (append* (for/list ([i server-ignore-file-list/strings])
              (list (build-path i) (build-path (format "~a~~" i))))))
 (define handin-file "handin.rkt")
+
+;; These are absolute paths to programs that don't seem to have Racket equivalents.
+(define-runtime-path chown (find-executable-path "chown"))

@@ -47,12 +47,16 @@
       (make-directory* grade-dest)
       (define dest (build-path grade-dest (format "part~a.rkt" i)))
       (when dest
-        (copy-file handin-path dest)))))
+        (copy-file handin-path dest))
+      (system* chown "-R" ":2500admins" grade-dest))))
 
 ; zip up these new assignments for graders
-(for ([grader (directory-list grader-assignment-dir
-                              #:build? #t)])
-  (parameterize ([current-directory grader])
-    (for ([student (directory-list grader)]
-          #:when (directory-exists? student))
-      (zip (path-replace-extension student ".zip") student))))
+(parameterize ([current-directory grader-assignment-dir])
+  (for ([grader (directory-list grader-assignment-dir)])
+    (apply zip "grades.zip"
+           (for/list ([student (directory-list grader)]
+                      #:when (directory-exists? (build-path grader student)))
+             (build-path grader student)))
+    (copy-file "grades.zip" (build-path grader "grades.zip"))
+    (delete-file "grades.zip")
+    (system* chown "-R" ":2500admins" (build-path grader "grades.zip"))))
