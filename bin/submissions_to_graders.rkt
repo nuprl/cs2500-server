@@ -57,6 +57,5 @@
            (for/list ([student (directory-list grader)]
                       #:when (directory-exists? (build-path grader student)))
              (build-path grader student)))
-    (copy-file "grades.zip" (build-path grader "grades.zip"))
-    (delete-file "grades.zip")
+    (rename-file-or-directory "grades.zip" (build-path grader "grades.zip"))
     (system* chown "-R" ":2500admins" (build-path grader "grades.zip"))))
