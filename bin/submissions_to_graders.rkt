@@ -58,4 +58,4 @@
                       #:when (directory-exists? (build-path grader student)))
              (build-path grader student)))
     (rename-file-or-directory "grades.zip" (build-path grader "grades.zip"))
-    (system* chown "-R" ":2500admins" (build-path grader "grades.zip"))))
+    (system* chown "-R" ":2500admins" grader)))
