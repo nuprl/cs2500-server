@@ -19,6 +19,19 @@
   (build-path grader-server-dir(format "~a-backup" assignment)))
 (define student-return-dir
   (build-path student-server-dir (format "~a-grades" assignment)))
+(define student-assignment-dirs
+  (for/list ([i (in-range 1 (add1 part-count))])
+    (build-path student-server-dir (format "~a-part~a" assignment i))))
+
+(unless (andmap directory-exists? student-assignment-dirs)
+  (error 'submission->grader
+         "assignment ~a does not exist in student-server"
+         assignment))
+
+
+(define grader-mapping
+  (read-grader-mapping-file (build-path (first student-assignment-dirs)
+                                        graders-mapping-file)))
 
 (unless (directory-exists? grader-assignment-dir)
   (error 'submission->grader
@@ -27,7 +40,7 @@
 
 (unless (directory-exists? student-return-dir)
   (error 'submission->grader
-         "assignment ~a does not exist in student-server"
+         "assignment ~a-grades does not exist in student-server"
          assignment))
 
 ;; Make a backup of directory before we begin
@@ -62,11 +75,16 @@
            (if (directory-exists? tmp-folder)
                (copy-directory/files tmp-folder grader)
                (error 'grader "Grader ~a is missing their grade folder" grader))))
-        (rename-file-or-directory "grades.zip" (build-path grader "grades.zip"))
         
         ;; Return to students
-        (for ([student-path (directory-list grader
-                                            #:build? #t)])
-          (define student (last (explode-path student-path)))
-          (define return-path (build-path student-return-dir student))
-          (copy-directory/files student-path return-path))))))
+        (for ([student (directory-list grader)])
+          (define correct-grader (find-grader grader-mapping (path->string student)))
+          (if (equal? correct-grader (path->string grader))
+              (copy-directory/files (build-path grader student)
+                                    (build-path student-return-dir student))
+              (error 'bad-grader
+                     "Grader ~a submitted solution for student ~a, that is not their student"
+                     grader student)))
+
+        ;; Replace grades file
+        (rename-file-or-directory "grades.zip" (build-path grader "grades.zip"))))))
