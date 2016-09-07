@@ -21,4 +21,3 @@
 (define (find-grader mapping student)
   (validate-grader-mappings mapping)
   (dict-ref mapping student))
-

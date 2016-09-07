@@ -15,8 +15,9 @@
   (error 'part-count "Part count not positive integer: ~a" part-count))
 
 (define student-assignment-dirs
-  (for/list ([i (in-range 1 (add1 part-count))])
-    (build-path student-server-dir (format "~a-part~a" assignment i))))
+  (for/list ([i (in-range part-count)])
+    (build-path student-server-dir
+                (format "~a~a" assignment (integer->char (+ (char->integer #\a) i))))))
 (define grader-assignment-dir (build-path grader-server-dir assignment))
 
 (unless (andmap directory-exists? student-assignment-dirs)

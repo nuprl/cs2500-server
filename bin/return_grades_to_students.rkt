@@ -16,12 +16,13 @@
 
 (define grader-assignment-dir (build-path grader-server-dir assignment))
 (define grader-assignment-backup-dir
-  (build-path grader-server-dir(format "~a-backup" assignment)))
+  (build-path grader-server-dir (format "~a-backup" assignment)))
 (define student-return-dir
   (build-path student-server-dir (format "~a-grades" assignment)))
 (define student-assignment-dirs
-  (for/list ([i (in-range 1 (add1 part-count))])
-    (build-path student-server-dir (format "~a-part~a" assignment i))))
+  (for/list ([i (in-range part-count)])
+    (build-path student-server-dir
+                (format "~a~a" assignment (integer->char (+ (char->integer #\a) i))))))
 
 (unless (andmap directory-exists? student-assignment-dirs)
   (error 'submission->grader
