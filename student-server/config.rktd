@@ -10,6 +10,7 @@
  (session-timeout 45)
  (extra-fields
   (("Full Name" #f #f)
+   ("Email" #f #f)
    ("Lab" - #f)
    ("Grader" - #f)))
  (master-password #f)
