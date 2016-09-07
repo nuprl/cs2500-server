@@ -18,36 +18,27 @@
   (define output-file-path (make-temporary-file))
   (set-server-output-file-path! server output-file-path)
   (define ret
-    (thread
-     (λ ()
-       (with-output-to-file output-file-path
-         #:exists 'append
-         (λ ()
-           (set-server-output-file! server (current-output-port))
-           (parameterize ([current-directory s-p]
-                          [current-subprocess-custodian-mode 'kill])
-             (let loop ()
-               (match-define
-                 (list _ _ pid _ callback)
-                 (process*/ports
-                  (current-output-port)
-                  (current-input-port)
-                  'stdout
-                  (find-exe)
-                  "-I" "handin-server"))
-               (sleep (* 60 60 3))
-               (callback 'kill)
-               (loop))))))))
+    (thread (λ ()
+              (with-output-to-file output-file-path #:exists 'append
+                (λ ()
+                  (set-server-output-file! server (current-output-port))
+                  (parameterize ([current-directory s-p]
+                                 [current-subprocess-custodian-mode 'kill])
+                    (let loop ()
+                      (match-define (list _ _ pid _ callback)
+                        (process*/ports (current-output-port)
+                                        (current-input-port)
+                                        'stdout
+                                        (find-exe) "-I" "handin-server"))
+                      (sleep (* 60 60 3))
+                      (callback 'kill)
+                      (loop))))))))
   (set-server-thread! server ret)
   server)
 
 (define servers (make-hash))
 (dict-set! servers 'student (run-server! (make-server student-server-dir)))
 (dict-set! servers 'grader  (run-server! (make-server grader-server-dir)))
-#| Uncomment once added
-(dict-set! servers 'accel-student (run-server! (make-server accel-student-server-dir)))
-(dict-set! servers 'accel-grader  (run-server! (make-server accel-grader-server-dir)))
-|#
 
 (let loop ()
   (define command-str (readline "> "))
@@ -63,8 +54,7 @@
         - (output <server>)
         - (restart <server>)
         - (list-servers)
-        - (exit)
-      })]
+        - (exit)})]
     [`(exit) (exit)]
     [`(eval ,expr)
      (with-handlers ([exn? (λ (e) (printf "Error: ~a" e))])
