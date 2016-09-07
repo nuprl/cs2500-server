@@ -40,6 +40,9 @@
 (dict-set! servers 'student (run-server! (make-server student-server-dir)))
 (dict-set! servers 'grader  (run-server! (make-server grader-server-dir)))
 
+(displayln "Welcome to the CS2500 Server Interface")
+(displayln "Type (help) for help")
+
 (let loop ()
   (define command-str (readline "> "))
   (define command
@@ -77,7 +80,7 @@
        [(dict-has-key? servers server-symb)
         (define server (dict-ref servers server-symb))
         (kill-thread (server-thread server))
-        (run-server! (server-path server))]
+        (run-server! server)]
        [else (printf "Server ~a does not exist.~n" server)])]
     [`(list-servers) (displayln servers)]
     [_ (printf "Command not found: ~a~n" command)])
