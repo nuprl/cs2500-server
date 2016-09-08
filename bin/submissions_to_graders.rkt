@@ -31,9 +31,7 @@
          assignment))
 
 (define grader-mapping
-  (read-grader-mapping-file (build-path (first student-assignment-dirs)
-                                        graders-mapping-file)))
-
+  (read-grader-mapping-file (build-path student-server-dir graders-mapping-file)))
 
 ; Copy existing assignments to grader folder
 (for ([assignment-dir (in-list student-assignment-dirs)]

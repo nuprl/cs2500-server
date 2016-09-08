@@ -19,20 +19,9 @@
   (build-path grader-server-dir (format "~a-backup" assignment)))
 (define student-return-dir
   (build-path student-server-dir (format "~a-grades" assignment)))
-(define student-assignment-dirs
-  (for/list ([i (in-range part-count)])
-    (build-path student-server-dir
-                (format "~a~a" assignment (integer->char (+ (char->integer #\a) i))))))
-
-(unless (andmap directory-exists? student-assignment-dirs)
-  (error 'submission->grader
-         "assignment ~a does not exist in student-server"
-         assignment))
-
 
 (define grader-mapping
-  (read-grader-mapping-file (build-path (first student-assignment-dirs)
-                                        graders-mapping-file)))
+  (read-grader-mapping-file (build-path student-server-dir graders-mapping-file)))
 
 (unless (directory-exists? grader-assignment-dir)
   (error 'submission->grader
