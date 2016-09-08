@@ -22,7 +22,8 @@
 
 (for ([i (in-range 1 (add1 part-count))])
   (define assignment-path 
-   (build-path student-server-dir (format "~a-part~a" assignment i)))
+   (build-path student-server-dir
+               (format "~a~a" assignment (integer->char (+ (char->integer #\a) i)))))
   (make-directory* assignment-path)
   (copy-file (build-path data-dir checker-file)
              (build-path assignment-path checker-file))
