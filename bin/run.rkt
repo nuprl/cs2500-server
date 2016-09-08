@@ -9,9 +9,10 @@
 (struct server (path
                 [thread #:mutable]
                 [output-file #:mutable]
-                [output-file-path #:mutable]))
+                [output-file-path #:mutable]
+                [proc-callback #:mutable]))
 (define (make-server path)
-  (server path #f #f #f))
+  (server path #f #f #f #f))
 
 (define (run-server! server)
   (define s-p (server-path server))
@@ -30,7 +31,9 @@
                                         (current-input-port)
                                         'stdout
                                         (find-exe) "-I" "handin-server"))
+                      (set-server-proc-callback! server callback)
                       (sleep (* 60 60 3))
+                      (set-server-proc-callback! server #f)
                       (callback 'kill)
                       (loop))))))))
   (set-server-thread! server ret)
@@ -79,6 +82,8 @@
      (cond
        [(dict-has-key? servers server-symb)
         (define server (dict-ref servers server-symb))
+        (define callback (server-proc-callback server))
+        (and callback (callback 'kill))
         (kill-thread (server-thread server))
         (run-server! server)]
        [else (printf "Server ~a does not exist.~n" server)])]
