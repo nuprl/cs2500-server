@@ -1,5 +1,4 @@
 #!/usr/bin/env racket
-
 #lang racket
 
 ;;; Constructs an assignment for the users students.
@@ -26,11 +25,7 @@
                (format "~a~a" assignment (integer->char (+ (char->integer #\a) i)))))
   (make-directory* assignment-path)
   (copy-file (build-path data-dir checker-file)
-             (build-path assignment-path checker-file))
-  (copy-file (build-path data-dir graders-mapping-file)
-             (build-path assignment-path graders-mapping-file))
-  (copy-file (build-path data-dir pairing-file)
-             (build-path assignment-path pairing-file)))
+             (build-path assignment-path checker-file)))
 
 (displayln
  "Remember to update the config files for the student and grader servers manually!!!")

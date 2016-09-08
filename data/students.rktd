@@ -1,5 +1,0 @@
-(("a" "A" "a@a.com")
- ("b" "B" "b@b.com")
- ("c" "C" "c@c.com")
- ("d" "D" "d@d.com")
- ("e" "E" "e@e.com"))

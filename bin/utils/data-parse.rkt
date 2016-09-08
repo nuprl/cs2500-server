@@ -21,3 +21,19 @@
 (define (find-grader mapping student)
   (validate-grader-mappings mapping)
   (dict-ref mapping student))
+
+(define (read-config config-path)
+  (define table
+    (with-input-from-file config-path
+      (λ ()
+        (read))))
+  (make-hash (for/list ([i (in-list table)])
+               (cons (first i) (second i)))))
+
+(define (write-config config-path table)
+  (define out
+    (for/list ([(k v) (in-dict table)])
+      (list k v)))
+  (with-output-to-file config-path #:exists 'replace
+    (λ () (write out))))
+  
