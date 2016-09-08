@@ -3,7 +3,7 @@
 
 (require compiler/find-exe
          syntax/location
-         readline/readline
+         ;readline/readline
          "utils/constants.rkt")
 
 (struct server (path
@@ -46,12 +46,18 @@
 (displayln "Welcome to the CS2500 Server Interface")
 (displayln "Type (help) for help")
 
+(define prompt "> ")
+
 (let loop ()
+  (display prompt)
+  (define command (read))
+    #|
   (define command-str (readline "> "))
   (define command
     (with-handlers ([exn? (λ (e) (printf "Error: ~a" e))])
       (add-history command-str)
       (read (open-input-string command-str))))
+|#
   (match command
     [`(help)
      (displayln
