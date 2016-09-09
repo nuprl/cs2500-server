@@ -22,6 +22,19 @@
   (validate-grader-mappings mapping)
   (dict-ref mapping student))
 
+(define (read-pairs pairs-path)
+  (with-input-from-file pairs-path
+    (λ ()
+      (read))))
+
+(define (read-users users-path)
+  (define table
+    (with-input-from-file users-path
+      (λ ()
+        (read))))
+  (make-hash (for/list ([i (in-list table)])
+               (cons (first i) (second i)))))
+
 (define (read-config config-path)
   (define table
     (with-input-from-file config-path

@@ -13,13 +13,9 @@
 (define grader-server-dir (build-path base-dir "grades-server"))
 (define grader-config-file (build-path grader-server-dir "config.rktd"))
 (define data-dir (build-path base-dir "data"))
-(define pairing-file "pairings.rktd")
 (define checker-file "checker.rkt")
-(define graders-mapping-file "grader-mapping.rktd")
 (define server-ignore-file-list/strings
-  (list checker-file
-        pairing-file
-        graders-mapping-file))
+  (list checker-file))
 (define server-ignore-file-list
   (append* (for/list ([i server-ignore-file-list/strings])
              (list (build-path i) (build-path (format "~a~~" i))))))
