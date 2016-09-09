@@ -19,8 +19,8 @@
 (unless (and (integer? part-count) (> part-count 0))
   (error 'part-count "Part count not positive integer: ~a" part-count))
 
-(for ([i (add1 part-count)])
-  (define assignment-path 
+(for ([i part-count])
+  (define assignment-path
    (build-path student-server-dir
                (format "~a~a" assignment (integer->char (+ (char->integer #\a) i)))))
   (make-directory* assignment-path)
