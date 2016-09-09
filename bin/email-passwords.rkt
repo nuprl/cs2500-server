@@ -8,7 +8,11 @@
 ;; be in the format of the users.rktd file.
 ;;
 ;; Mutt setup differs from system to system. You may find the Racket package docs or
-;; https://wiki.archlinux.org/index.php/Mutt to be helpful.
+;; https://wiki.archlinux.org/index.php/Mutt to be helpful. It may be that you only need to set the
+;; SMTP URL within your ~/.muttrc as follows, replacing $smtp_user, $smtp_pass, and $smtp_server with
+;; your username, password, and domain name for the SMTP server:
+;;
+;; set smtp_url="smtps://$smtp_user:$smtp_pass@$smtp_server"
 
 ;; =============================================================================
 
