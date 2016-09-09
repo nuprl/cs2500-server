@@ -3,6 +3,8 @@
 (provide current-pairs-file-list
          valid-pairing)
 
+(require racket/function)
+
 (define pairs-files
   '("pairs1.rktd"
     "pairs2.rktd"))
@@ -27,4 +29,4 @@
         (error* "User ~a is not registered to work alone" usernames))))
 
 (define (valid-pairing usernames)
-  (map valid-pairing/file (current-pairs-file-list)))
+  (map (curry valid-pairing/file usernames) (current-pairs-file-list)))
