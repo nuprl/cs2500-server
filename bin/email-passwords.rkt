@@ -38,26 +38,30 @@
    (when (null? (*mutt-default-bcc*))
      (raise-user-error 'email-passwords "please specify a bcc address on the command line (./email-passwords.rkt --bcc 'you@example.com')))"))
    (for ((rktd (in-list rktd*)))
-     (for/list ((row (in-list (file->value rktd))))
-       (match-define `(,uname (,password-line ,fname ,email ,_ ...)) row)
-       (match (list password-line email)
-         [(list `(plaintext ,pword) (regexp #rx".+"))
-          (define uname (car row))
-          (define pword (cadr (car (cadr row))))
-          (define fname (cadr (cadr row)))
-          (define email (caddr (cadr row)))
-          (with-output-to-file TMP #:exists 'replace
-            (lambda ()
-              (printf "Hello ~a,\n\n" fname)
-              (printf "Your cs2500 username/password are:\n")
-              (printf "    username: ~a\n" uname)
-              (printf "    password: ~a\n" pword)
-              (printf "\n\n")
-              (when (*inspiration*)
-                (displayln (*inspiration*)))
-              (void)))
-          (mutt TMP #:to email #:subject "[cs2500] username/password")]
-         [_
-          ;; We can't send non-plaintext passwords, nor can we send anything if there is no email
-          ;; address
-          (printf "Unable to send email for this row: ~s\n" row)])))))
+     (define sent-to
+       (for/list ((row (in-list (file->value rktd))))
+        (match-define `(,uname (,password-line ,fname ,email ,_ ...)) row)
+        (match (list password-line email)
+          [(list `(plaintext ,pword) (regexp #rx".+"))
+           (define uname (car row))
+           (define pword (cadr (car (cadr row))))
+           (define fname (cadr (cadr row)))
+           (define email (caddr (cadr row)))
+           (with-output-to-file TMP #:exists 'replace
+             (lambda ()
+               (printf "Hello ~a,\n\n" fname)
+               (printf "Your cs2500 username/password are:\n")
+               (printf "    username: ~a\n" uname)
+               (printf "    password: ~a\n" pword)
+               (printf "\n\n")
+               (when (*inspiration*)
+                 (displayln (*inspiration*)))
+               (void)))
+           (mutt TMP #:to email #:subject "[cs2500] username/password")
+           email]
+          [_
+           ;; We can't send non-plaintext passwords, nor can we send anything if there is no email
+           ;; address
+           (printf "Unable to send email for this row: ~s\n" row)
+           #f])))
+     (printf "Sent mail to: ~a\n" (filter values sent-to)))))
