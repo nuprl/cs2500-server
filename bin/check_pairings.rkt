@@ -6,10 +6,13 @@
 (define users-file
   (build-path student-server-dir "users.rktd"))
 
-(define pairings-file
+(define lab-number
   (command-line
-   #:args (pairings-file)
-   pairings-file))
+   #:args (lab-number)
+   lab-number))
+
+(define pairings-file
+  (build-path student-server-dir (format "pairs~a.rktd" lab-number)))
 
 (unless (file-exists? pairings-file)
   (raise-user-error 'pairing-check "File ~a does not exist" pairings-file))
