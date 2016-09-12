@@ -1,11 +1,14 @@
 #!/usr/bin/env racket
 #lang racket
 
-;;; Constructs an assignment for the users students.
+;; Usage: ./make-assignment.rkt assignment-name number-of-parts
+;;
+;; Constructs an assignment for the users students. I.e., this constructs the appropriately named
+;; directory for each assignmen-part in the student server directory and also copies the checker file
+;; into it.
 
-;;; IMPORTANT!!!
-;;; This does NOT add the assignment to the config files for the graders
-;;; or students servers. You must do that yourself.
+;;; IMPORTANT!!!  This does NOT add the assignment to the config files for the graders or students
+;;; servers, nor does it add the pairs.rktd file to the assignment. You must do that yourself.
 
 (require racket/cmdline
          "utils/constants.rkt"

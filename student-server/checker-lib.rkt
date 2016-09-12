@@ -21,6 +21,10 @@
    (for/list ([i (in-list pairs-files)])
      (build-path (current-directory) i))))
 
+;; usernames: (Listof String) or String
+;; pair-file: file-path
+;;
+;; Errors if the student pair represented by usernames is not a listed pair in pair-file
 (define (valid-pairing/file usernames pair-file)
   (define sorted-usernames (if (list? usernames) usernames (list usernames)))
   (unless (member usernames (get-pairs pair-file))

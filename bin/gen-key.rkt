@@ -1,6 +1,11 @@
 #!/usr/bin/env racket
 #lang racket
 
+;; Creates an SSL key for the server and copies it to the appropriate places in both the student and
+;; grader server directories
+;;
+;; Usage: ./gen-key.rkt
+
 (require racket/runtime-path)
 
 (define-runtime-path this-dir ".")
@@ -11,7 +16,7 @@
  (system* (find-executable-path "openssl")
           "req" "-x509" "-newkey" "rsa:2048"
           "-keyout" "private-key.pem" "-out" "server-cert.pem" "-days" "365"))
- 
+
 (copy-file (build-path this-dir "private-key.pem") (build-path student-server "private-key.pem") #t)
 (copy-file (build-path this-dir "private-key.pem") (build-path grades-server "private-key.pem") #t)
 (copy-file (build-path this-dir "server-cert.pem") (build-path student-server "server-cert.pem") #t)

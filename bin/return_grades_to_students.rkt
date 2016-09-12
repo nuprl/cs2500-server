@@ -1,6 +1,8 @@
 #!/usr/bin/env racket
 #lang racket
 
+;; Usage: ./return_grades_to_students.rkt assignment-name number-of-parts
+
 (require racket/cmdline
          file/unzip
          "utils/constants.rkt"

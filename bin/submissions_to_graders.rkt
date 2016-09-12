@@ -1,6 +1,13 @@
 #!/usr/bin/env racket
 #lang racket
 
+;; Usage: ./submissions-to-graders.rkt assignment-name number-of-parts
+;;
+;; Copies the specified assignment to the grader server, assigning student pair submissions to graders
+;; as given in the assignments grader mapping file.
+;;
+;; This script requires that a directory with the name $assignment-name exist in the grader server.
+
 (require racket/cmdline
          file/zip
          "utils/constants.rkt"
