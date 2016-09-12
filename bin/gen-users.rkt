@@ -19,7 +19,7 @@
                          [name (car p)]
                          [email (cadr p)]
                          [user (string->symbol (car (string-split email "@")))])
-                        `(,user (,pass ,name ,email)))) ls)
+                        `(,user (,pass ,name ,email "" "")))) ls)
                              users)))
      #:exists 'replace)))
 
