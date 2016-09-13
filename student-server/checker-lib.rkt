@@ -3,11 +3,23 @@
 (provide current-pairs-file-list
          valid-pairing)
 
-(require racket/function)
+(require racket/function
+         "../bin/utils/constants.rkt")
 
 (define pairs-files
   '("pairs1.rktd"
-    "pairs2.rktd"))
+    "pairs2.rktd"
+    "pairs3.rktd"
+    "pairs4.rktd"
+    "pairs5.rktd"
+    "pairs6.rktd"
+    "pairs7.rktd"
+    "pairs8.rktd"
+    "pairs9.rktd"
+    "pairs10.rktd"
+    "pairs11.rktd"
+    "pairs12.rktd"
+    "pairs14.rktd"))
 
 (define (error* fmt . args)
   (error (apply format fmt args)))
@@ -19,7 +31,7 @@
 (define current-pairs-file-list
   (make-parameter
    (for/list ([i (in-list pairs-files)])
-     (build-path (current-directory) i))))
+     (build-path student-server-dir i))))
 
 ;; usernames: (Listof String) or String
 ;; pair-file: file-path
@@ -33,4 +45,5 @@
         (error* "User ~a is not registered to work alone" usernames))))
 
 (define (valid-pairing usernames)
-  (map (curry valid-pairing/file usernames) (current-pairs-file-list)))
+  (map (curry valid-pairing/file usernames) (current-pairs-file-list))
+  (void))
