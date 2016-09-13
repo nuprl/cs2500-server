@@ -38,8 +38,10 @@
 ;;
 ;; Errors if the student pair represented by usernames is not a listed pair in pair-file
 (define (valid-pairing/file usernames pair-file)
-  (define sorted-usernames (if (list? usernames) usernames (list usernames)))
-  (member sorted-usernames (get-pairs pair-file)))
+  (define sorted-usernames (sort (if (list? usernames) usernames (list usernames))))
+  (for/fold ([acc #f])
+            ([pair (get-pairs pair-file)])
+    (or acc (equal? (sort string<? pair) sorted-usernames))))
 
 (define (valid-pairing usernames)
   (unless (ormap (curry valid-pairing/file usernames) (current-pairs-file-list))
