@@ -1,3 +1,4 @@
+#!/usr/bin/env racket
 #lang racket
 
 (require "utils/constants.rkt"
@@ -24,6 +25,7 @@
   (read-users users-file))
 
 (for ([i (in-list pairs)])
+  (displayln i)
   (unless (< (length i) 3)
     (raise-user-error 'invalid-pairing "Group ~a is too large"
                       i))
