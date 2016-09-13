@@ -32,7 +32,7 @@
                                         'stdout
                                         (find-exe) "-I" "handin-server"))
                       (set-server-proc-callback! server callback)
-                      (sleep (* 60 60 3))
+                      (sleep (* 60 20)) ; 20 minutes
                       (set-server-proc-callback! server #f)
                       (callback 'kill)
                       (loop))))))))
