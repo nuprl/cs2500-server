@@ -39,11 +39,8 @@
 ;; Errors if the student pair represented by usernames is not a listed pair in pair-file
 (define (valid-pairing/file usernames pair-file)
   (define sorted-usernames (if (list? usernames) usernames (list usernames)))
-  (unless (member usernames (get-pairs pair-file))
-    (if (list? usernames)
-        (error* "Users not registered to work together: ~a" usernames)
-        (error* "User ~a is not registered to work alone" usernames))))
+  (member sorted-usernames (get-pairs pair-file)))
 
 (define (valid-pairing usernames)
-  (map (curry valid-pairing/file usernames) (current-pairs-file-list))
-  (void))
+  (unless (ormap (curry valid-pairing/file usernames) (current-pairs-file-list))
+    (error* "Users not registered to work together: ~a" usernames)))
