@@ -68,7 +68,8 @@ TODO: a section on assigning pairs, or the pair file in general
 1. Run the bin/make-assignment script with appropriate arguments (see
    the top of that script for usage details). This creates a new
    directory under student-server for each part of the assignment.
-2. Copy a pair-assignment file (pairs.rktd) into the new directory.
+2. Make sure that the pairs.rktd file in student-server is up-to-date for the
+   current assignment.
 
 The above steps do not "activate" the assignment; that is, they do not
 make it available for students to submit to. To activate an assignment's
