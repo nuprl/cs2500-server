@@ -33,10 +33,6 @@
    (for/list ([i (in-list pairs-files)])
      (build-path student-server-dir i))))
 
-;; usernames: (Listof String) or String
-;; pair-file: file-path
-;;
-;; Errors if the student pair represented by usernames is not a listed pair in pair-file
 (define (valid-pairing/file usernames pair-file)
   (define sorted-usernames (sort (if (list? usernames) usernames (list usernames))
                                  string<?))
@@ -44,6 +40,9 @@
             ([pair (get-pairs pair-file)])
     (or acc (equal? (sort pair string<?) sorted-usernames))))
 
+;; usernames: (Listof String) or String
+;;
+;; Errors if the student pair represented by usernames is not a listed pair in any pairs file
 (define (valid-pairing usernames)
   (unless (ormap (curry valid-pairing/file usernames) (current-pairs-file-list))
     (error* "Users not registered to work together: ~a" usernames)))
