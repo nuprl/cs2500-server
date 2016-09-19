@@ -18,7 +18,7 @@
             ([pair pairs])
     (define pair-name (string-join (sort pair string<?) "+"))
     (values
-     (cons (cons pair-name (list-ref graders grader-index)) mappings)
+     (cons (cons pair-name (symbol->string (list-ref graders grader-index))) mappings)
      (remainder (add1 grader-index) (length graders)))))
 
 (write-grader-mapping mappings (build-path student-server-dir graders-mapping-file))
