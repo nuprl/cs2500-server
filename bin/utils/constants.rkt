@@ -11,6 +11,7 @@
 (define student-server-dir (build-path base-dir "student-server"))
 (define student-config-file (build-path student-server-dir "config.rktd"))
 (define grader-server-dir (build-path base-dir "grades-server"))
+(define graders-mapping-file "grader-mapping.rktd")
 (define grader-config-file (build-path grader-server-dir "config.rktd"))
 (define data-dir (build-path base-dir "data"))
 (define checker-file "checker.rkt")

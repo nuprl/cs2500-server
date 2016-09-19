@@ -49,4 +49,10 @@
       (list k v)))
   (with-output-to-file config-path #:exists 'replace
     (λ () (write out))))
-  
+
+;; Writes the given grader mapping (a list of pairs of strings) to the given file path
+(define (write-grader-mapping mapping-list path)
+  (call-with-output-file path
+    (lambda (file)
+      (write mapping-list file))
+    #:exists 'replace))

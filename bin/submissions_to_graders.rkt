@@ -4,7 +4,7 @@
 ;; Usage: ./submissions-to-graders.rkt assignment-name number-of-parts
 ;;
 ;; Copies the specified assignment to the grader server, assigning student pair submissions to graders
-;; as given in the assignments grader mapping file.
+;; as given in the assignment's grader mapping file (student-server/grader-mapping.rktd).
 ;;
 ;; This script requires that a directory with the name $assignment-name exist in the grader server.
 
