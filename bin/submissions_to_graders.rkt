@@ -5,8 +5,6 @@
 ;;
 ;; Copies the specified assignment to the grader server, assigning student pair submissions to graders
 ;; as given in the assignment's grader mapping file (student-server/grader-mapping.rktd).
-;;
-;; This script requires that a directory with the name $assignment-name exist in the grader server.
 
 (require racket/cmdline
          file/zip
@@ -32,10 +30,12 @@
          "assignment ~a does not exist in student-server"
          assignment))
 
-(unless (directory-exists? grader-assignment-dir)
+(when (directory-exists? grader-assignment-dir)
   (error 'submission->grader
-         "assignment ~a does not exist in grader-server"
+         "assignment ~a already exists in grader-server"
          assignment))
+
+(make-directory grader-assignment-dir)
 
 (define grader-mapping
   (read-grader-mapping-file (build-path student-server-dir graders-mapping-file)))
