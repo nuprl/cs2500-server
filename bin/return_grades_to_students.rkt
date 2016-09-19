@@ -30,10 +30,12 @@
          "assignment ~a does not exist in grades-server"
          assignment))
 
-(unless (directory-exists? student-return-dir)
+(when (directory-exists? student-return-dir)
   (error 'submission->grader
-         "assignment ~a-grades does not exist in student-server"
+         "assignment ~a-grades already exists in student-server"
          assignment))
+
+(make-directory student-return-dir)
 
 ;; Make a backup of directory before we begin
 (delete-directory/files grader-assignment-backup-dir #:must-exist? #f)
@@ -47,6 +49,7 @@
                                   "original state"))
                    (delete-directory/files grader-assignment-dir #:must-exist? #f)
                    (copy-directory/files grader-assignment-backup-dir grader-assignment-dir)
+                   (delete-directory/files student-return-dir)
                    
                    ; Re-raise exception
                    (raise e))])
