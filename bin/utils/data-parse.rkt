@@ -54,5 +54,5 @@
 (define (write-grader-mapping mapping-list path)
   (call-with-output-file path
     (lambda (file)
-      (write mapping-list file))
+      (pretty-write mapping-list file))
     #:exists 'replace))
