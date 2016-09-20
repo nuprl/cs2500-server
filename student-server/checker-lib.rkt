@@ -19,6 +19,7 @@
     "pairs10.rktd"
     "pairs11.rktd"
     "pairs12.rktd"
+    "pairs13.rktd"
     "pairs14.rktd"))
 
 (define (error* fmt . args)
