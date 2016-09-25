@@ -30,7 +30,8 @@
          "assignment ~a does not exist in student-server"
          assignment))
 
-(when (directory-exists? grader-assignment-dir)
+(when (and (directory-exists? grader-assignment-dir)
+           (not (null? (directory-list grader-assignment-dir))))
   (error 'submission->grader
          "assignment ~a already exists in grader-server"
          assignment))
