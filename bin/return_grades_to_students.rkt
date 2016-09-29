@@ -86,10 +86,7 @@
                    grader (hash-ref student) student))
           (hash-update! return-mapping student grader)
           (copy-directory/files (build-path grader student)
-                                    (build-path student-return-dir student))
-          (error 'bad-grader
-                 "Grader ~a submitted solution for student ~a, that is not their student"
-                 grader student))
+                                    (build-path student-return-dir student)))
 
         ;; Replace grades file
         (rename-file-or-directory "grades.zip" (build-path grader "grades.zip"))))))
