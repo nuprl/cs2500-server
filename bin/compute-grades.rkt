@@ -1,16 +1,18 @@
 #!/usr/bin/env racket
 #lang racket/base
-;; Warning: chunks of this file have been modified by William J. Bowman
+;; Warning: chunks of this file have been modified by William J. Bowman and Leif Andersen
 ;; for cs2500. These chunks may contradict the README without
 ;; warning.
+
+(require "utils/constants.rkt")
 
 ;; ============================================================================
 ;; customizations
 
-(define grades-file (course-file "grades"))
-(define pset-dir    (course-dir  "."))
-(define pic-dir     (course-dir  "content"))
-(define grade-conf-file (course-file "grades.rkt"))
+(define grades-file (build-path base-dir "grades"))
+(define pset-dir    student-server-dir)
+(define pic-dir     (build-path base-dir "content"))
+(define grade-conf-file (build-path base-dir "grades.rkt"))
 
 ;; ============================================================================
 ;; Utilities
@@ -47,8 +49,6 @@
                (cons (cons hw grade)
                      (hash-ref students student '())))))
 
-(define (round-up x)    (floor (+ 1/2 x)))
-(define (round10 x)     (/ (round (* 10 x)) 10))
 (define (percent-str x) (real->decimal-string (* x 100) 1))
 
 (define (get-deltas xs)
@@ -211,7 +211,7 @@
          ;; the above should always match
          [_ (error 'collect-grade "internal error in regexps")])]))
   (gin 'close) (when oin (oin 'close))
-  (values (inexact->exact (round-up (* grade factor))) (reverse html)))
+  (values (inexact->exact (ceiling (* grade factor))) (reverse html)))
 
 (define (find-all-grades)
   (nest ([parameterize ([current-directory pset-dir])]
@@ -356,7 +356,7 @@
 (define (draw-grades grades* spread title target)
   (define width 700)
   (define grades ; ignore non-numeric grades
-    (sort (map (λ (g) (round-up (* 100 g))) (filter number? grades*)) <))
+    (sort (map (λ (g) (ceiling (* 100 g))) (filter number? grades*)) <))
   (define ming (apply min 0 grades))
   (define maxg (+ 5 (apply max 100 grades)))
   ;; translated from "grader.c" (Andrew Myers), with some hard wired options
@@ -385,10 +385,10 @@
   (define (f x) (vector-ref curve (round (/ (* (- bins 1) (- x ming)) range))))
   ;;
   (define len (length grades))
-  (define average (round-up (/ (apply + grades) len)))
+  (define average (ceiling (/ (apply + grades) len)))
   (define median
     (if (even? len)
-      (round-up (/ (+ (list-ref grades (sub1 (/ len 2)))
+      (ceiling (/ (+ (list-ref grades (sub1 (/ len 2)))
                       (list-ref grades (/ len 2)))
                    2))
       (list-ref grades (/ (sub1 len) 2))))

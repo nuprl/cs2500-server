@@ -1,7 +1,8 @@
 #lang racket/base
 
 (require racket/list racket/string racket/runtime-path
-         handin-server/private/config)
+         handin-server/private/config
+         "constants.rkt")
 
 (provide remove-duplicates
          (all-from-out handin-server/private/config))
@@ -76,7 +77,7 @@
 (define user-info
   (let ([table (make-hasheq)] [all '()])
     (define extra-fields (map car (get-conf 'extra-fields)))
-    (for ([x (read-data-file "users.rktd")])
+    (for ([x (read-data-file (build-path student-server-dir "users.rktd"))])
       (define fields
         (cons (cons "username" (symbol->string (car x)))
               (map cons (cons "password-hash" extra-fields) (cadr x))))
