@@ -49,8 +49,8 @@
                      (λ (e)
                        ; Replace folder with backup
                        (printf (string-join (list "Error occurred, reverting graders folder to its"
-                                                  "original state\n"
-                                                  "Current grader: ~a"))
+                                                  "original state~n"
+                                                  "Current grader: ~a~n"))
                                grader)
                        (delete-directory/files grader-assignment-dir #:must-exist? #f)
                        (copy-directory/files grader-assignment-backup-dir grader-assignment-dir)
@@ -76,8 +76,9 @@
         
         ;; Return to students
         (for ([student (directory-list grader)])
-          (define correct-grader (find-grader grader-mapping (path->string student)))
-          (if (equal? correct-grader (path->string grader))
+          ;(define correct-grader (find-grader grader-mapping (path->string student)))
+          ; TODO re-enable check
+          (if #t ;(equal? correct-grader (path->string grader))
               (copy-directory/files (build-path grader student)
                                     (build-path student-return-dir student))
               (error 'bad-grader
