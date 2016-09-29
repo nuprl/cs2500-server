@@ -58,6 +58,7 @@
                        
                        ; Re-raise exception
                        (raise e))])
+      (printf "Returning grades from: ~a~n" grader)
       (unless (ormap (curry equal? grader) server-ignore-file-list)
         
         ;; Unzip the file
