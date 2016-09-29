@@ -42,6 +42,9 @@
 (delete-directory/files grader-assignment-backup-dir #:must-exist? #f)
 (copy-directory/files grader-assignment-dir grader-assignment-backup-dir)
 
+;; Store which graders returned what
+(define return-mapping (make-hash))
+
 ; Do the copying for every grader
 (parameterize ([current-directory grader-assignment-dir])
   (for ([grader (directory-list grader-assignment-dir)])
@@ -77,14 +80,16 @@
         
         ;; Return to students
         (for ([student (directory-list grader)])
-          ;(define correct-grader (find-grader grader-mapping (path->string student)))
-          ; TODO re-enable check
-          (if #t ;(equal? correct-grader (path->string grader))
-              (copy-directory/files (build-path grader student)
+          (when (hash-has-key? student)
+            (error 'bad-grader
+                   "Both grader ~a and grader ~a submitted a solution for student ~a"
+                   grader (hash-ref student) student))
+          (hash-update! return-mapping student grader)
+          (copy-directory/files (build-path grader student)
                                     (build-path student-return-dir student))
-              (error 'bad-grader
-                     "Grader ~a submitted solution for student ~a, that is not their student"
-                     grader student)))
+          (error 'bad-grader
+                 "Grader ~a submitted solution for student ~a, that is not their student"
+                 grader student))
 
         ;; Replace grades file
         (rename-file-or-directory "grades.zip" (build-path grader "grades.zip"))))))
