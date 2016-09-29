@@ -30,31 +30,34 @@
          "assignment ~a does not exist in grades-server"
          assignment))
 
-(when (directory-exists? student-return-dir)
+(when (and (directory-exists? student-return-dir)
+           (not (null? (directory-list student-return-dir))))
   (error 'submission->grader
          "assignment ~a-grades already exists in student-server"
          assignment))
 
-(make-directory student-return-dir)
+(make-directory* student-return-dir)
 
 ;; Make a backup of directory before we begin
 (delete-directory/files grader-assignment-backup-dir #:must-exist? #f)
 (copy-directory/files grader-assignment-dir grader-assignment-backup-dir)
 
 ; Do the copying for every grader
-(with-handlers ([exn:fail?
-                 (λ (e)
-                   ; Replace folder with backup
-                   (displayln (~a "Error occurred, reverting lab folder to its"
-                                  "original state"))
-                   (delete-directory/files grader-assignment-dir #:must-exist? #f)
-                   (copy-directory/files grader-assignment-backup-dir grader-assignment-dir)
-                   (delete-directory/files student-return-dir)
-                   
-                   ; Re-raise exception
-                   (raise e))])
-  (parameterize ([current-directory grader-assignment-dir])
-    (for ([grader (directory-list grader-assignment-dir)])
+(parameterize ([current-directory grader-assignment-dir])
+  (for ([grader (directory-list grader-assignment-dir)])
+    (with-handlers ([exn:fail?
+                     (λ (e)
+                       ; Replace folder with backup
+                       (printf (string-join (list "Error occurred, reverting graders folder to its"
+                                                  "original state\n"
+                                                  "Current grader: ~a"))
+                               grader)
+                       (delete-directory/files grader-assignment-dir #:must-exist? #f)
+                       (copy-directory/files grader-assignment-backup-dir grader-assignment-dir)
+                       (delete-directory/files student-return-dir)
+                       
+                       ; Re-raise exception
+                       (raise e))])
       (unless (ormap (curry equal? grader) server-ignore-file-list)
         
         ;; Unzip the file
