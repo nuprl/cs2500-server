@@ -53,7 +53,7 @@
       (define grade-dest (build-path grader-assignment-dir grader student)) 
       (make-directory* grade-dest)
       (define dest (build-path grade-dest (format "part~a.rkt" i)))
-      (when dest
+      (when (file-exists? handin-path)
         (copy-file handin-path dest))
       (system* chown "-R" ":2500admins" grade-dest))))
 
