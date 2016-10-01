@@ -80,7 +80,7 @@
         
         ;; Return to students
         (for ([student (directory-list grader)])
-          (when (hash-has-key? student)
+          (when (hash-has-key? return-mapping student)
             (error 'bad-grader
                    "Both grader ~a and grader ~a submitted a solution for student ~a"
                    grader (hash-ref student) student))
