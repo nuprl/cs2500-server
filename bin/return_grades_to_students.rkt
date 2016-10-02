@@ -84,7 +84,7 @@
             (error 'bad-grader
                    "Both grader ~a and grader ~a submitted a solution for student ~a"
                    grader (hash-ref student) student))
-          (hash-update! return-mapping student grader)
+          (hash-set! return-mapping student grader)
           (copy-directory/files (build-path grader student)
                                     (build-path student-return-dir student)))
 
