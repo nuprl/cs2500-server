@@ -94,5 +94,7 @@
 
 ; Now walk through student dir to calculate their grades
 (for ([student (directory-list student-return-dir)])
-  (grade-file (build-path student (format "part~a.rkt" part-to-grade))
-              (build-path student "grade")))
+  (define part-file (build-path student (format "part~a.rkt" part-to-grade)))
+  (when (file-exists? part-file)
+    (grade-file part-file
+                (build-path student "grade"))))
