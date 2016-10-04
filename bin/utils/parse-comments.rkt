@@ -38,7 +38,7 @@
     ";> <+10>"
     ";> <-5> Why?"))
   (check-equal?
-   (grab-comments "../bsl2.rkt")
+   (grab-comments "../tests/bsl2.rkt")
    (gvector
     "; The first three lines of this file were inserted by DrRacket. They record metadata"
     "; about the language level of this file in a form that our tools can easily process."
@@ -77,18 +77,19 @@
 
 ;; Path Path -> Void
 (define (grade-file file grade-path)
-  (define grade
+  (define-values (grade total)
     (let* ([acc file]
            [acc (grab-comments acc)]
            [acc (comments->grader-comments acc)]
            [acc (grab-grades acc)]
            [acc (gvector->list acc)]
-           [acc (apply + 0 acc)])
-      acc))
+           [grade (apply + 0 acc)]
+           [total (first acc)])
+      (values grade total)))
   (with-output-to-file grade-path
     #:exists 'replace
     (λ ()
-      (printf "~a" grade))))
+      (printf "~a/~a" grade total))))
 
 (module+ test
-  (grade-file "tests/bsl.rkt" "foo"))
+  (grade-file "../tests/bsl.rkt" "foo"))
