@@ -6,12 +6,13 @@
 (require racket/cmdline
          file/unzip
          "utils/constants.rkt"
-         "utils/data-parse.rkt")
+         "utils/data-parse.rkt"
+         "utils/parse-comments.rkt")
 
-(define-values (assignment part-count)
+(define-values (assignment part-count part-to-grade)
   (command-line
-   #:args (assignment parts)
-   (values assignment (string->number parts))))
+   #:args (assignment parts part-to-grade)
+   (values assignment (string->number parts) (string->number part-to-grade))))
 
 (unless (and (integer? part-count) (> part-count 0))
   (error 'part-count "Part count not positive integer: ~a" part-count))
@@ -90,3 +91,8 @@
 
         ;; Replace grades file
         (rename-file-or-directory "grades.zip" (build-path grader "grades.zip"))))))
+
+; Now walk through student dir to calculate their grades
+(for ([student (directory-list student-return-dir)])
+  (grade-file (build-path student (format "part~a.rkt" part-to-grade))
+              (build-path student "grade")))
