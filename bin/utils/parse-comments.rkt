@@ -84,7 +84,7 @@
            [acc (grab-grades acc)]
            [acc (gvector->list acc)]
            [grade (apply + 0 acc)]
-           [total (first acc)])
+           [total (if (null? acc) 0 (first acc))])
       (values grade total)))
   (with-output-to-file grade-path
     #:exists 'replace
