@@ -1,7 +1,8 @@
 #lang racket
 
 (provide (contract-out
-          [grade-file (-> path? path? void?)]))
+          [grade-file (-> path? path? void?)]
+          [get-point-values (-> path? (values integer? integer?))]))
 (require data/gvector
          wxme
          syntax-color/racket-lexer)
@@ -75,17 +76,30 @@
     (gvector "<+10>" "<-5>" "NO" "<+1> <-2>"))
    (gvector 10 -5 1 -2)))
 
+;; Path -> (Values (U #f Number) (U #f Number))
+;; Return the student's score (first number)
+;;   and total points the assignment is supposedly out of (second number)
+;; Defaults to 0 if no points are found.
+(define (get-point-values file)
+  (let* ([acc file]
+         [acc (grab-comments acc)]
+         [acc (comments->grader-comments acc)]
+         [acc (grab-grades acc)]
+         [acc (gvector->list acc)]
+         [grade (apply + 0 acc)]
+         [total (if (null? acc) 0 (first acc))])
+      (values grade total)))
+
+(module+ test
+  (define-values (grade total)
+    (get-point-values "../tests/bsl.rkt"))
+  (check-equal? grade 5)
+  (check-equal? total 10))
+
 ;; Path Path -> Void
 (define (grade-file file grade-path)
   (define-values (grade total)
-    (let* ([acc file]
-           [acc (grab-comments acc)]
-           [acc (comments->grader-comments acc)]
-           [acc (grab-grades acc)]
-           [acc (gvector->list acc)]
-           [grade (apply + 0 acc)]
-           [total (if (null? acc) 0 (first acc))])
-      (values grade total)))
+    (get-point-values file))
   (with-output-to-file grade-path
     #:exists 'replace
     (λ ()

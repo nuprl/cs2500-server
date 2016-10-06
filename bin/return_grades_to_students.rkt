@@ -9,10 +9,13 @@
          "utils/data-parse.rkt"
          "utils/parse-comments.rkt")
 
-(define-values (assignment part-count part-to-grade)
+(define-values (assignment part-count part-to-grade total-points)
   (command-line
-   #:args (assignment parts part-to-grade)
-   (values assignment (string->number parts) (string->number part-to-grade))))
+   #:args (assignment parts part-to-grade total-points)
+   (values assignment
+           (string->number parts)
+           (string->number part-to-grade)
+           (string->number total-points))))
 
 (unless (and (integer? part-count) (> part-count 0))
   (error 'part-count "Part count not positive integer: ~a" part-count))
@@ -96,5 +99,9 @@
 (for ([student (directory-list student-return-dir)])
   (define part-file (build-path student (format "part~a.rkt" part-to-grade)))
   (when (file-exists? part-file)
+    (define-values (grade total) (get-point-values part-file))
+    (unless (and (= total total-points)
+                 (grade . <= . total))
+      (printf "Tutor has incorrect grading syntax for student: ~a~n" student))
     (grade-file part-file
                 (build-path student "grade"))))
