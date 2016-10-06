@@ -96,7 +96,7 @@
         (rename-file-or-directory "grades.zip" (build-path grader "grades.zip"))))))
 
 ; Now walk through student dir to calculate their grades
-(for ([student (directory-list student-return-dir)])
+(for ([student (directory-list student-return-dir #:build? #t)])
   (define part-file (build-path student (format "part~a.rkt" part-to-grade)))
   (when (file-exists? part-file)
     (define-values (grade total) (get-point-values part-file))
