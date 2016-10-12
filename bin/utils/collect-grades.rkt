@@ -1,6 +1,7 @@
 #lang racket
 
-(provide (contract-out [build-gradebook (-> (dict-implements/c string? any/c)
+(provide build-gradebook)
+#;(provide (contract-out [build-gradebook (-> (dict-implements/c string? any/c)
                                             (dict-implements/c
                                              string? (dict-implements/c string? number?)))]))
 (require "constants.rkt"
