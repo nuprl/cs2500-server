@@ -3,6 +3,8 @@
 (provide (all-defined-out))
 
 (require racket/runtime-path)
+(module+ test
+  (require rackunit))
 
 ;; These constants assume the github structure has not changed
 ;;   adjust them if needed
@@ -24,3 +26,19 @@
 
 ;; These are absolute paths to programs that don't seem to have Racket equivalents.
 (define-runtime-path chown (find-executable-path "chown"))
+
+(define graded-part-string "part~a.rkt")
+
+(define split-student-regexp #rx"([^+]*)(\\+([^+]*))?")
+
+;; String -> (Values String (U String #f))
+(define (split-students students-string)
+  (define s (regexp-match split-student-regexp students-string))
+  (values (second s) (fourth s)))
+(module+ test
+  (check-equal? (let-values ([(a b) (split-students "a+b")])
+                  (list a b))
+                (list "a" "b"))
+  (check-equal? (let-values ([(a b) (split-students "a")])
+                  (list a b))
+                (list "a" #f)))
