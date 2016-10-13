@@ -19,7 +19,7 @@
     (for ([(ass part) (in-dict assignments)])
       (unless (directory-exists? ass)
         (error 'gradebook "Assignment ~a does not exist!" ass))
-      (for ([pair (in-directory ass)])
+      (for ([pair (directory-list ass)])
         (define-values (s1 s2) (split-students pair))
         (define file-to-grade (build-path ass pair (format graded-part-string part)))
         (define-values (grade total)
