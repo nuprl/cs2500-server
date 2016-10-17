@@ -100,8 +100,9 @@
   (define part-file (build-path student (format "part~a.rkt" part-to-grade)))
   (when (file-exists? part-file)
     (define-values (grade total) (get-point-values part-file))
-    (unless (and (= total total-points)
+    (unless (and (total . >= . total-points)
                  (grade . <= . total))
       (printf "Tutor has incorrect grading syntax for student: ~a~n" student))
     (grade-file part-file
-                (build-path student "grade"))))
+                (build-path student "grade")
+                #:total total-points)))

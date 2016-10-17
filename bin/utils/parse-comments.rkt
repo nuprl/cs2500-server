@@ -96,8 +96,9 @@
   (check-equal? grade 5)
   (check-equal? total 10))
 
-;; Path Path -> Void
-(define (grade-file file grade-path)
+;; Path Path (#:total (U Number #f)) -> Void
+(define (grade-file file grade-path
+                    #:total [total #f])
   (define-values (grade total)
     (get-point-values file))
   (with-output-to-file grade-path
