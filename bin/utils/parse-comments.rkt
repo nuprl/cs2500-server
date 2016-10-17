@@ -1,7 +1,7 @@
 #lang racket
 
 (provide (contract-out
-          [grade-file (-> path? path? void?)]
+          [grade-file (->* (path? path?) (#:total number?) void?)]
           [get-point-values (-> path? (values integer? integer?))]))
 (require data/gvector
          wxme
