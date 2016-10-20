@@ -11,8 +11,13 @@
          "utils/constants.rkt"
          "utils/data-parse.rkt")
 
+(define single-part (make-parameter #f))
 (define-values (assignment part-count)
   (command-line
+   #:once-each
+   [("-s" "--single-part")
+    "Submit only a single part to the graders"
+    (single-part #t)]
    #:args (assignment parts)
    (values assignment (string->number parts))))
 
@@ -20,7 +25,8 @@
   (error 'part-count "Part count not positive integer: ~a" part-count))
 
 (define student-assignment-dirs
-  (for/list ([i (in-range part-count)])
+  (for/list ([i (in-range (if (single-part) (- part-count 1) 0)
+                          part-count)])
     (build-path student-server-dir
                 (format "~a~a" assignment (integer->char (+ (char->integer #\a) i))))))
 (define grader-assignment-dir (build-path grader-server-dir assignment))
@@ -43,7 +49,7 @@
 
 ; Copy existing assignments to grader folder
 (for ([assignment-dir (in-list student-assignment-dirs)]
-      [i (in-naturals 1)])
+      [i (in-naturals (if (single-part) part-count 1))])
   (for ([student-path (directory-list assignment-dir
                                       #:build? #t)])
     (define student (last (explode-path student-path)))
