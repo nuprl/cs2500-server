@@ -31,7 +31,8 @@
     (λ ()
       (define pairs (read))
       (unless ((listof (listof string?)) pairs)
-        (error "Please inform your instructor that they have an invalid pairs file"))
+        (error (format "Please inform your instructor that they have an invalid pairs file: ~a"
+                       pairs-file)))
       pairs)))
 
 (define current-pairs-file-list
