@@ -4,6 +4,7 @@
          valid-pairing)
 
 (require racket/function
+         racket/contract
          "../bin/utils/constants.rkt")
 
 (define pairs-files
@@ -27,7 +28,11 @@
 
 (define (get-pairs pairs-file)
   (with-input-from-file pairs-file
-    (λ () (read))))
+    (λ ()
+      (define pairs (read))
+      (unless ((listof (listof string?)) pairs)
+        (error "Please inform your instructor that they have an invalid pairs file"))
+      pairs)))
 
 (define current-pairs-file-list
   (make-parameter
