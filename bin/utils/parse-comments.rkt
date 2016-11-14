@@ -122,13 +122,13 @@
 
 ;; (U Path (Listof Path)) Path (#:total (U Number #f)) -> Void
 (define (grade-file file grade-path
-                    #:total [total #f])
+                    #:total [real-total #f])
   (define-values (grade total)
     (get-point-values file))
   (with-output-to-file grade-path
     #:exists 'replace
     (λ ()
-      (printf "~a/~a" grade total))))
+      (printf "~a/~a" grade (or real-total total)))))
 
 (module+ test
   (grade-file "../tests/bsl.rkt" "foo"))
