@@ -108,7 +108,7 @@
       (define txt (file->string i))
       (with-output-to-file part-file
         #:exists 'append
-        (λ () (display i))))
+        (λ () (display txt))))
     (define-values (grade total) (get-point-values part-file))
     (unless (and (total . >= . total-points)
                  (grade . <= . total))
