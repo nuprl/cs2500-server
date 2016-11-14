@@ -83,7 +83,8 @@
                (error 'grader "Grader ~a is missing their grade folder" grader))))
         
         ;; Return to students
-        (for ([student (directory-list grader)])
+        (for ([student (directory-list grader)]
+              #:unless (member student server-ignore-file-list))
           (when (hash-has-key? return-mapping student)
             (error 'bad-grader
                    "Both grader ~a and grader ~a submitted a solution for student ~a"
