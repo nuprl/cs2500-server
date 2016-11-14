@@ -1,8 +1,10 @@
 #lang racket
 
 (provide (contract-out
-          [grade-file (->* (path? path?) (#:total number?) void?)]
-          [get-point-values (-> path? (values integer? integer?))]))
+          [grade-file (->* ((or/c path? (listof path?)) path?) (#:total number?) void?)]
+          [get-point-values (->* ((or/c path? (listof path?)))
+                                 (#:total number?)
+                                 (values integer? integer?))]))
 (require data/gvector
          wxme
          syntax-color/racket-lexer)
@@ -80,7 +82,7 @@
 ;; Return the student's score (first number)
 ;;   and total points the assignment is supposedly out of (second number)
 ;; Defaults to 0 if no points are found.
-(define (get-point-values file)
+(define (get-point-values* file)
   (let* ([acc file]
          [acc (grab-comments acc)]
          [acc (comments->grader-comments acc)]
@@ -91,12 +93,34 @@
       (values grade total)))
 
 (module+ test
-  (define-values (grade total)
-    (get-point-values "../tests/bsl.rkt"))
-  (check-equal? grade 5)
-  (check-equal? total 10))
+  (let ()
+    (define-values (grade total)
+      (get-point-values* "../tests/bsl.rkt"))
+    (check-equal? grade 5)
+    (check-equal? total 10)))
 
-;; Path Path (#:total (U Number #f)) -> Void
+;; (U Path (Listof Path)) [#:total (U #f Number)] -> (Values (U #f Number) (U #f Number))
+;; Get the points and totals of one or more files
+(define (get-point-values #:total [total #f]
+                          file/s)
+  (define files (if (list? file/s) file/s (list file/s)))
+  (define-values (points possible-total)
+    (for/fold ([points 0]
+               [total 0])
+              ([f (in-list files)])
+      (define-values (p t) (get-point-values* f))
+      (values (+ points p) (+ total t))))
+  (values points (or total possible-total)))
+
+(module+ test
+  (let ()
+    (define-values (grade total)
+      (get-point-values (list "../tests/bsl.rkt"
+                              "../tests/bsl.rkt")))
+    (check-equal? grade 10)
+    (check-equal? total 20)))
+
+;; (U Path (Listof Path)) Path (#:total (U Number #f)) -> Void
 (define (grade-file file grade-path
                     #:total [total #f])
   (define-values (grade total)

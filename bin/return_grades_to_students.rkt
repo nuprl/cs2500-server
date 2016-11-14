@@ -102,17 +102,10 @@
                             (build-path student (format "part~a.rkt" x)))
                           part-to-grade))
   (when (ormap file-exists? part-files)
-    (define part-file (make-temporary-file))
-    (for ([i (in-list part-files)]
-          #:when (file-exists? i))
-      (define txt (file->string i))
-      (with-output-to-file part-file
-        #:exists 'append
-        (λ () (display txt))))
-    (define-values (grade total) (get-point-values part-file))
-    (unless (and (total . >= . total-points)
-                 (grade . <= . total))
+    (match-define-values (grade _) (get-point-values part-files))
+    (unless (and (grade . <= . total-points)
+                 (grade . >= . 0))
       (printf "Tutor has incorrect grading syntax for student: ~a~n" student))
-    (grade-file part-file
+    (grade-file part-files
                 (build-path student "grade")
                 #:total total-points)))
