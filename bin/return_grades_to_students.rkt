@@ -11,10 +11,10 @@
 
 (define-values (assignment part-count part-to-grade total-points)
   (command-line
-   #:args (assignment parts part-to-grade total-points)
+   #:args (assignment parts total-points . part-to-grade)
    (values assignment
            (string->number parts)
-           (string->number part-to-grade)
+           (map string->number part-to-grade)
            (string->number total-points))))
 
 (unless (and (integer? part-count) (> part-count 0))
@@ -97,8 +97,16 @@
 
 ; Now walk through student dir to calculate their grades
 (for ([student (directory-list student-return-dir #:build? #t)])
-  (define part-file (build-path student (format "part~a.rkt" part-to-grade)))
-  (when (file-exists? part-file)
+  (define part-files (map (λ (x)
+                            (build-path student (format "part~a.rkt" x)))
+                          part-to-grade))
+  (when (andmap file-exists? part-files)
+    (define part-file (make-temporary-file))
+    (for ([i (in-list part-files)])
+      (define txt (file->string i))
+      (with-output-to-file part-file
+        #:exists 'append
+        (λ () (display i))))
     (define-values (grade total) (get-point-values part-file))
     (unless (and (total . >= . total-points)
                  (grade . <= . total))
