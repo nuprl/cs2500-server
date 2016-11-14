@@ -2,7 +2,8 @@
 
 (provide (all-defined-out))
 
-(require racket/runtime-path)
+(require racket/runtime-path
+         glob)
 (module+ test
   (require rackunit))
 
@@ -17,11 +18,13 @@
 (define grader-config-file (build-path grader-server-dir "config.rktd"))
 (define data-dir (build-path base-dir "data"))
 (define checker-file "checker.rkt")
-(define server-ignore-file-list/strings
-  (list checker-file))
 (define server-ignore-file-list
-  (append* (for/list ([i server-ignore-file-list/strings])
-             (list (build-path i) (build-path (format "~a~~" i))))))
+  (map build-path
+       (list* checker-file
+              ".DS_Store"
+              (append
+               (glob "*~")
+               (glob "*.bak")))))
 (define handin-file "handin.rkt")
 
 ;; These are absolute paths to programs that don't seem to have Racket equivalents.
