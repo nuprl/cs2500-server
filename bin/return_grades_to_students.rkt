@@ -98,10 +98,11 @@
 
 ; Now walk through student dir to calculate their grades
 (for ([student (directory-list student-return-dir #:build? #t)])
-  (define part-files (map (λ (x)
-                            (build-path student (format "part~a.rkt" x)))
-                          part-to-grade))
-  (when (ormap file-exists? part-files)
+  (define mabye-part-files (map (λ (x)
+                                  (build-path student (format "part~a.rkt" x)))
+                                part-to-grade))
+  (when (ormap file-exists? mabye-part-files)
+    (define part-files (filter file-exists? mabye-part-files))
     (match-define-values (grade _) (get-point-values part-files))
     (unless (and (grade . <= . total-points)
                  (grade . >= . 0))
